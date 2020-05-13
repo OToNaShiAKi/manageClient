@@ -35,6 +35,9 @@ export default {
       { text: "用途", sortable: false, value: "purpose" }
     ]
   }),
-  computed: { ...mapState(["lists"]) }
+  computed: { ...mapState(["lists"]) },
+  created() {
+    this.$store.dispatch("GetList");
+  }
 };
 </script>

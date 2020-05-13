@@ -1,7 +1,8 @@
 import axios from 'axios'
-import md5 from "blueimp-md5";
 
-const base = 'http://118.31.58.18:3000/'
+const base = process.env.NODE_ENV === 'development' ? 'manage/' : 'http://118.31.58.18:3000/'
+
+axios.defaults.withCredentials = true
 
 const error = (err, commit) => {
     console.warn(err);
@@ -16,11 +17,7 @@ export default {
     AdminLogin: ({
         commit
     }, login) => {
-        const md5Login = {
-            account: login.account,
-            password: md5(login.password)
-        }
-        axios.post(base + 'admin/login', md5Login).then(res => {
+        axios.post(base + 'admin/login', login).then(res => {
             if (res.data.status == 200) {
                 commit('Notify', {
                     message: res.data.message,
@@ -50,12 +47,7 @@ export default {
     AdminRegister: ({
         commit
     }, register) => {
-        const md5Register = {
-            name: register.name,
-            phone: register.phone,
-            password: md5(register.password)
-        }
-        axios.post(base + 'admin/register', md5Register).then(res => {
+        axios.post(base + 'admin/register', register).then(res => {
             if (res.data.status == 200) {
                 commit('Notify', {
                     message: res.data.message,
@@ -90,7 +82,7 @@ export default {
             if (res.data.status == 200)
                 commit('InitList', res.data.lists)
             else throw res.data;
-        }).catch(err => error(err, commit))
+        })
     },
     EditList: ({
         commit
@@ -125,10 +117,6 @@ export default {
     AccountInfo: ({
         commit
     }, info) => {
-        if (info.password) info = {
-            _id: info._id,
-            password: md5(info.password)
-        }
         axios.post(base + 'admin/api/info', info).then(res => {
             if (res.data.status == 200) {
                 if (info.password) {

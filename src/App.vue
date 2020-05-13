@@ -12,9 +12,6 @@ export default {
   name: "App",
   computed: {
     ...mapState(["snack"])
-  },
-  created() {
-    this.$store.dispatch("GetList");
   }
 };
 </script>

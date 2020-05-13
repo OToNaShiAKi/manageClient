@@ -15,9 +15,7 @@
             @keyup.enter="loginSubmit"
             label="密码"
           />
-          <v-btn color="primary" @click="loginSubmit" block outlined rounded>
-            登录
-          </v-btn>
+          <v-btn color="primary" @click="loginSubmit" block outlined rounded>登录</v-btn>
         </v-tab-item>
         <v-tab-item key="register">
           <v-text-field v-model="register.name" label="用户名" />
@@ -34,9 +32,7 @@
             label="密码"
             @keyup.enter="registerSubmit"
           />
-          <v-btn color="primary" @click="registerSubmit" block outlined rounded>
-            注册
-          </v-btn>
+          <v-btn color="primary" @click="registerSubmit" block outlined rounded>注册</v-btn>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -48,6 +44,7 @@
 </template>
 
 <script>
+import md5 from "blueimp-md5";
 import { getItem } from "./../plugins/storage";
 import { mapActions, mapMutations } from "vuex";
 
@@ -69,10 +66,7 @@ export default {
   }),
   created() {
     const admin = getItem("admin");
-    if (admin) {
-      this.login.account = admin.name || admin.phone;
-      this.login.password = admin.password;
-    }
+    if (admin) this.login.account = admin.name || admin.phone;
   },
   methods: {
     ...mapActions(["AdminLogin", "AdminRegister"]),
@@ -82,7 +76,11 @@ export default {
         return this.Notify({ message: "请输入姓名或手机号" });
       if (!this.login.password.length)
         return this.Notify({ message: "请输入密码" });
-      this.AdminLogin(this.login);
+      const login = {
+        account: this.login.account,
+        password: md5(this.login.password)
+      };
+      this.AdminLogin(login);
     },
     registerSubmit() {
       if (!this.register.name.length)
@@ -91,7 +89,12 @@ export default {
         return this.Notify({ message: "请输入手机号" });
       if (!this.register.password.length)
         return this.Notify({ message: "请输入密码" });
-      this.AdminRegister(this.register);
+      const register = {
+        name: this.register.name,
+        phone: this.register.phone,
+        password: md5(this.register.password)
+      };
+      this.AdminRegister(register);
     }
   }
 };

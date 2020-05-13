@@ -3,20 +3,17 @@
     <v-subheader class="mt-6">修改信息</v-subheader>
     <v-text-field label="姓名" v-model="name" />
     <v-text-field label="手机号" v-model="phone" />
-    <v-btn color="primary" outlined @click="changeInfo" class="float-right">
-      提交
-    </v-btn>
+    <v-btn color="primary" outlined @click="changeInfo" class="float-right">提交</v-btn>
     <v-subheader class="mt-6">修改密码</v-subheader>
     <v-text-field label="原密码" type="password" v-model="old" />
     <v-text-field label="新密码" type="password" v-model="password" />
-    <v-btn color="primary" outlined @click="changePassword" class="float-right">
-      提交
-    </v-btn>
+    <v-btn color="primary" outlined @click="changePassword" class="float-right">提交</v-btn>
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapMutations } from "vuex";
+import md5 from "blueimp-md5";
 
 const phoneRule = /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/;
 
@@ -50,14 +47,15 @@ export default {
     },
     changePassword() {
       const admin = this.$store.state.admin;
-      if (this.old != admin.password)
+      if (md5(this.old) != admin.password)
         return this.Notify({ message: "原密码错误" });
       if (!this.password.length)
         return this.Notify({ message: "请输入新密码" });
-      this.AccountInfo({
-        password: this.password,
+      const info = {
+        password: md5(this.password),
         _id: admin._id
-      });
+      };
+      this.AccountInfo(info);
     }
   }
 };

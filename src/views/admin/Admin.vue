@@ -5,9 +5,7 @@
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <v-app-bar-nav-icon color="primary" @click="drawer = !drawer" />
-      <v-toolbar-title class="primary--text title">
-        {{ title }}
-      </v-toolbar-title>
+      <v-toolbar-title class="primary--text title">{{ title }}</v-toolbar-title>
     </v-app-bar>
     <v-navigation-drawer disable-resize-watcher v-model="drawer" app>
       <v-list-item>
@@ -103,6 +101,7 @@ export default {
         adminId: this.admin._id
       };
       this.AdminLogin(login);
+      this.GetList();
     } else if (!this.login) this.$router.replace("/login");
   },
   computed: {
@@ -118,7 +117,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["AdminLogin", "AdminLogout"]),
+    ...mapActions(["AdminLogin", "AdminLogout", "GetList"]),
     logout() {
       if (this.admin._id) this.AdminLogout();
       else this.$router.replace("/login");
