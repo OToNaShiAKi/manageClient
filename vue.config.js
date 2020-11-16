@@ -1,7 +1,5 @@
 module.exports = {
-  transpileDependencies: [
-    "vuetify"
-  ],
+  transpileDependencies: ["vuetify"],
   publicPath: "./",
   devServer: {
     proxy: {
@@ -9,9 +7,9 @@ module.exports = {
         target: "http://localhost:3000",
         changeOrigin: true,
         pathRewrite: {
-          "^/manage": ""
-        }
-      }
-    }
-  }
-}
+          "^/manage": "",
+        },
+      },
+    },
+  },
+};

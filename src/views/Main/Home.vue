@@ -1,17 +1,18 @@
 <template>
   <div>
-    <v-app-bar color="white" shrink-on-scroll prominent app>
-      <v-btn color="primary" icon @click="$router.back()">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <v-app-bar-nav-icon color="primary" @click="drawer = !drawer" />
+    <v-app-bar color="white" shrink-on-scroll prominent app flat>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title class="primary--text title">{{ title }}</v-toolbar-title>
+      <v-spacer />
+      <v-btn icon>
+        <v-icon>mdi-logout-variant</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-navigation-drawer disable-resize-watcher v-model="drawer" app>
       <v-list-item>
-        <v-list-item-avatar>
+        <v-list-item-icon>
           <v-icon color="primary">mdi-account-circle</v-icon>
-        </v-list-item-avatar>
+        </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="title">{{ admin.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ admin.phone }}</v-list-item-subtitle>
@@ -21,26 +22,18 @@
       <v-list shaped>
         <v-subheader>界面列表</v-subheader>
         <v-list-item
-          color="primary"
           v-for="route in routes"
           :key="route.to"
           :to="route.to"
           :exact="true"
           link
+          color="primary"
         >
           <v-list-item-icon>
             <v-icon>{{ route.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ route.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content @click="dialog = !dialog">
-            <v-list-item-title>退出登录</v-list-item-title>
+            {{ route.title }}
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -55,7 +48,7 @@
         <v-card-actions>
           <v-btn color="error" text @click="dialog = false">取消</v-btn>
           <v-spacer />
-          <v-btn color="primary" text @click="logout">确认</v-btn>
+          <v-btn color="primary" text>确认</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -63,66 +56,74 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { /* mapActions, */ mapState } from "vuex";
+
+const width = document.body.clientWidth > 1200;
 
 export default {
-  name: "Admin",
+  name: "Home",
   data: () => ({
-    drawer: false,
+    drawer: width,
     dialog: false,
+    focus: "",
     routes: [
       {
         title: "借用管理",
-        to: "/admin",
-        icon: "mdi-clipboard-list-outline"
+        to: "/home/calendar",
+        icon: "mdi-calendar-outline",
       },
       {
-        title: "添加 / 编辑",
-        to: "/admin/edit",
-        icon: "mdi-file-edit-outline"
+        title: "添加借用",
+        to: "/home/edit",
+        icon: "mdi-file-edit-outline",
       },
       {
         title: "个人信息",
-        to: "/admin/info",
-        icon: "mdi-information-outline"
+        to: "/home/info",
+        icon: "mdi-information-outline",
       },
       {
-        title: "历史记录",
-        to: "/admin/history",
-        icon: "mdi-history"
-      }
-    ]
+        title: "账户管理",
+        to: "/home/account",
+        icon: "mdi-account-outline",
+      },
+      {
+        title: "教室管理",
+        to: "/home/room",
+        icon: "mdi-google-classroom",
+      },
+    ],
   }),
-  created() {
+  /* created() {
     if (this.admin._id && !this.login) {
       const login = {
         account: this.admin.name || this.admin.phone,
         password: this.admin.password,
-        adminId: this.admin._id
+        adminId: this.admin._id,
       };
       this.AdminLogin(login);
       this.GetList();
     } else if (!this.login) this.$router.replace("/login");
-  },
+  }, */
   computed: {
     ...mapState(["admin", "login"]),
     title() {
-      let name = this.$route.name,
-        title = "管理界面";
-      if (name == "AdminList") title = "借用管理";
+      const name = this.$route.name;
+      let title = "管理界面";
+      if (name == "Calendar") title = "借用管理";
       else if (name == "Info") title = "个人信息";
-      else if (name == "Edit") title = "添加 / 编辑";
+      else if (name == "Edit") title = "添加借用";
       else if (name == "History") title = "历史记录";
       return title;
-    }
+    },
   },
-  methods: {
+  /* methods: {
     ...mapActions(["AdminLogin", "AdminLogout", "GetList"]),
     logout() {
       if (this.admin._id) this.AdminLogout();
       else this.$router.replace("/login");
       this.dialog = false;
-    }
-  }
+    },
+  }, */
 };
 </script>

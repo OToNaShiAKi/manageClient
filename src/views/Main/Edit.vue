@@ -4,6 +4,9 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "Edit",
 };
 </script>
+
+<style>
+</style>
