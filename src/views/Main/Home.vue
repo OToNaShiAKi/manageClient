@@ -82,16 +82,6 @@ export default {
         to: "/home/info",
         icon: "mdi-information-outline",
       },
-      {
-        title: "账户管理",
-        to: "/home/account",
-        icon: "mdi-account-outline",
-      },
-      {
-        title: "教室管理",
-        to: "/home/room",
-        icon: "mdi-google-classroom",
-      },
     ],
   }),
   /* created() {
